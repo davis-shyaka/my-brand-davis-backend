@@ -100,7 +100,7 @@ exports.deletePost = async (req, res) => {
     // res.status(404);
     res.json({
       success: false,
-      message: "Post couldn't be deleted. Try again later.",
+      message: "Post doesn't exist.",
     });
     console.log("Error deleting post: ", error.message);
   }

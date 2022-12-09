@@ -4,8 +4,13 @@ const Post = require("../models/PostModel");
 // get all comments
 exports.allComments = async (req, res) => {
   try {
-    const comments = await Comment.find();
-    res.json({ success: true, message: "All comments", comments });
+    // const comments = await Comment.find();
+    // res.json({ success: true, message: "All comments", comments });
+    let data = await Comment.find().populate({
+      path: "post user",
+      select: "title surname givenName email",
+    });
+    res.status(200).json({ data: [...data], success: true });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
@@ -20,6 +25,7 @@ exports.createComment = async (req, res) => {
     const comment = new Comment({
       text: req.body.comment,
       post: id,
+      user: req.user.id,
     });
     // save comment
     await comment.save();
@@ -43,37 +49,13 @@ exports.createComment = async (req, res) => {
 // delete a comment
 exports.deleteComment = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-
-    // Pull out comment
-    const comment = post.comments.find(
-      (comment) => comment.id === req.params.comment_id
-    );
-
-    // Make sure comment exists
-    if (!comment) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Comment does not exist" });
-    }
-
-    // Check user
-    if (comment.user.toString() !== req.user.id) {
-      return res
-        .status(401)
-        .json({ success: false, message: "User not authorized" });
-    }
-
-    // Get remove index
-    const removeIndex = post.comments
-      .map((comment) => comment.user.toString())
-      .indexOf(req.user.id);
-
-    post.comments.splice(removeIndex, 1);
-
-    await post.save();
-
-    res.json(post.comments);
+    const comment = await Comment.findOne({ _id: req.params.id });
+    await comment.remove();
+    res.json({
+      success: true,
+      message: "Comment deleted succesfully",
+      comment,
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

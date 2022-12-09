@@ -7,6 +7,7 @@ const {
   deletePost,
   uploadCoverImage,
 } = require("../controllers/PostController");
+const { isAuth } = require("../middlewares/Authentication");
 const {
   validatePostCreation,
   postValidation,
@@ -31,9 +32,9 @@ router.post(
 router.get("/post/:id", getPost);
 
 // Update posts
-router.patch("/updatePost/:id", updatePost);
+router.patch("/updatePost/:id", isAuth, updatePost);
 
 // Delete posts
-router.delete("/deletePost/:id", deletePost);
+router.delete("/deletePost/:id", isAuth, deletePost);
 
 module.exports = router;
