@@ -1,11 +1,14 @@
-const mongoose = require("mongoose"); // new
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
 
-// Connect to MongoDB database
+// Connect to mongoose
 mongoose
-  .connect("mongodb://localhost:27017/my-brand", { useNewUrlParser: true })
-  .then(() => {
-    console.log("my db connected");
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
-  .catch((error) => {
-    console.log(error.message);
-  });
+  .then(() => {
+    console.log("database is connected");
+  })
+  .catch((err) => console.log(err.message));

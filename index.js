@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const routes = require("./routes/routes");
+const postRouter = require("./routes/postRouter");
+const userRouter = require("./routes/userRouter");
+const commentRouter = require("./routes/commentRouter");
 
 // my database
 require("./models/db");
@@ -15,5 +17,11 @@ app.listen(5000, () => {
   console.log("Server has started!");
 });
 
-// register routes
-app.use("/api", routes);
+// register post routes
+app.use("/api", postRouter);
+
+// register user routes
+app.use("/api", userRouter);
+
+// register comment routes
+app.use("/api", commentRouter);
