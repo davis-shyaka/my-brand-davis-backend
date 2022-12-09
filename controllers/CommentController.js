@@ -28,14 +28,14 @@ exports.createComment = async (req, res) => {
     // push the comment into the post.comments array
     postRelated.comments.push(comment);
     // save and redirect...
-    await postRelated.save(function (err) {
-      if (err) {
-        console.log(err);
-      }
-      //   res.redirect("/");
+    await postRelated.save();
+    res.json({
+      success: true,
+      message: "Comment posted successfully",
+      postRelated,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
+    res.json({ success: false, message: error.message });
+    console.log("Error posting comment: ", error.message);
   }
 };
