@@ -1,8 +1,8 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const postRouter = require("./routes/postRouter");
 const userRouter = require("./routes/userRouter");
 const commentRouter = require("./routes/commentRouter");
+const mailRouter = require("./routes/mailRouter");
 
 // my database
 require("./models/db");
@@ -25,3 +25,6 @@ app.use("/api", userRouter);
 
 // register comment routes
 app.use("/api", commentRouter);
+
+// register mail router
+app.use("/api", mailRouter);
