@@ -57,6 +57,7 @@ exports.uploadCoverImage = async (req, res) => {
 exports.getPost = async (req, res) => {
   try {
     const post = await Post.findOne({ _id: req.params.id });
+    res.status(200);
     res.send(post);
   } catch (error) {
     res.status(404);
@@ -82,6 +83,7 @@ exports.updatePost = async (req, res) => {
     }
 
     await post.save();
+    res.status(201);
     res.json({ success: true, message: "Post updated succesfully", post });
   } catch (error) {
     res.status(404);
@@ -95,9 +97,10 @@ exports.deletePost = async (req, res) => {
   try {
     const post = await Post.findOne({ _id: req.params.id });
     await post.remove();
+    res.status(200);
     res.json({ success: true, message: "Post deleted succesfully", post });
   } catch (error) {
-    // res.status(404);
+    res.status(404);
     res.json({
       success: false,
       message: "Post doesn't exist.",
