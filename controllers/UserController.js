@@ -74,10 +74,8 @@ exports.userSignIn = async (req, res) => {
     avatar: user.avatar ? user.avatar : "",
     token,
   };
-  console.log(userInfo);
   req.user = userInfo;
-  console.log(req.user);
-  res.json({ success: true, user: userInfo, token });
+  res.json({ success: true, user: userInfo });
 };
 
 // Upload Profile Picture / Avatar
