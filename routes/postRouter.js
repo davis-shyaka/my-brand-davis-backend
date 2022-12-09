@@ -5,6 +5,7 @@ const {
   getPost,
   updatePost,
   deletePost,
+  uploadCoverImage,
 } = require("../controllers/PostController");
 const {
   validatePostCreation,
@@ -17,6 +18,14 @@ router.get("/allPosts", allPosts);
 
 // Create posts
 router.post("/createPost", validatePostCreation, postValidation, createPost);
+
+// upload cover image
+router.post(
+  "/uploadCover",
+  validatePostCreation,
+  postValidation,
+  uploadCoverImage
+);
 
 // Get individual post
 router.get("/post/:id", getPost);
