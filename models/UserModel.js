@@ -19,11 +19,22 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   avatar: String,
+
+  role: {
+    type: Number,
+    default: 0,
+  },
+
   tokens: [{ type: Object }],
 
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+
+  isAdmin: {
+    type: Boolean,
+    default: false,
   },
 });
 

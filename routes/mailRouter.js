@@ -12,12 +12,12 @@ const {
 const router = express.Router();
 
 // Get all mail
-router.get("/allMail", allMail);
+router.get("/mail/all", allMail);
 
 // Create mail
-router.post("/createMail", validateMailCreation, mailValidation, createMail);
+router.post("/mail/create", validateMailCreation, mailValidation, createMail);
 
 // Delete mail
-router.delete("/deleteMail/:id", isAuth, deleteMail);
+router.delete("/mail/delete/:id", isAuth, deleteMail);
 
 module.exports = router;

@@ -72,6 +72,7 @@ exports.userSignIn = async (req, res) => {
     givenName: user.givenName,
     email: user.email,
     avatar: user.avatar ? user.avatar : "",
+    // token: user.tokens.length ? user.tokens[0].token : "",
     token,
   };
   req.user = userInfo;
@@ -116,7 +117,7 @@ exports.signOut = async (req, res, next) => {
         message: "Authorization failure",
       });
     }
-    const tokens = req.user.tokens;
+    const tokens = req.user.token;
 
     const newTokens = tokens.filter((t) => t.token !== token);
 

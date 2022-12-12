@@ -7,7 +7,7 @@ const {
   deletePost,
   uploadCoverImage,
 } = require("../controllers/PostController");
-const { isAuth } = require("../middlewares/Authentication");
+const { isAuth, isAdmin } = require("../middlewares/Authentication");
 const {
   validatePostCreation,
   postValidation,
@@ -15,10 +15,17 @@ const {
 const router = express.Router();
 
 // Get all posts
-router.get("/allPosts", allPosts);
+router.get("/post/all", allPosts);
 
 // Create posts
-router.post("/createPost", validatePostCreation, postValidation, createPost);
+router.post(
+  "/post/create",
+  isAuth,
+  isAdmin,
+  validatePostCreation,
+  postValidation,
+  createPost
+);
 
 // upload cover image
 router.post(
@@ -32,9 +39,9 @@ router.post(
 router.get("/post/:id", getPost);
 
 // Update posts
-router.patch("/updatePost/:id", isAuth, updatePost);
+router.patch("/post/update/:id", isAuth, updatePost);
 
 // Delete posts
-router.delete("/deletePost/:id", isAuth, deletePost);
+router.delete("/posts/delete/:id", isAuth, deletePost);
 
 module.exports = router;

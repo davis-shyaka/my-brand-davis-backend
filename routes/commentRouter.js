@@ -8,12 +8,12 @@ const { isAuth } = require("../middlewares/Authentication");
 const router = express.Router();
 
 // getting all comments
-router.get("/allComments", allComments);
+router.get("/comment/all", allComments);
 
-// creating a comment route
-router.post("/post/:id/comment", isAuth, createComment);
+// creating a comment
+router.post("/post/comment/create/:id", isAuth, createComment);
 
 // deleting a comment
-router.delete("/deleteComment/:id", isAuth, deleteComment);
+router.delete("/comment/delete/:id", isAuth, deleteComment);
 
 module.exports = router;

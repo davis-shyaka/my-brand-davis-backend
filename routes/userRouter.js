@@ -8,7 +8,7 @@ const {
   allUsers,
   deleteUser,
 } = require("../controllers/UserController");
-const { isAuth } = require("../middlewares/Authentication");
+const { isAuth, isAdmin } = require("../middlewares/Authentication");
 const {
   validateUserSignUp,
   userValidation,
@@ -27,19 +27,19 @@ const fileFilter = (req, file, cb) => {
 const uploads = multer({ storage, fileFilter });
 
 // get all users
-router.get("/allUsers", isAuth, allUsers);
+router.get("/user/all", isAuth, isAdmin, allUsers);
 
 // create new user
-router.post("/createUser", validateUserSignUp, userValidation, createUser);
+router.post("/user/create", validateUserSignUp, userValidation, createUser);
 
 // sign in user
-router.post("/signIn", validateUserSignIn, userValidation, userSignIn);
+router.post("/user/sign-in", validateUserSignIn, userValidation, userSignIn);
 
 // sign out user
-router.post("/signOut", isAuth, signOut);
+router.post("/user/sign-out", isAuth, signOut);
 
 // Delete posts
-router.delete("/deleteUser/:id", isAuth, deleteUser);
+router.delete("/user/delete/:id", isAuth, isAdmin, deleteUser);
 
 // upload profile image
 router.post("/uploadProfile", isAuth, uploads.single("profile"), uploadProfile);
