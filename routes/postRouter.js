@@ -7,11 +7,11 @@ const {
   deletePost,
   uploadCoverImage,
 } = require("../controllers/PostController");
-const { isAuth, isAdmin } = require("../middlewares/Authentication");
+const { isAuth, isAdmin } = require("../middleware/Authentication");
 const {
   validatePostCreation,
   postValidation,
-} = require("../middlewares/validation/PostValidation");
+} = require("../middleware/validation/PostValidation");
 const router = express.Router();
 
 // Get all posts

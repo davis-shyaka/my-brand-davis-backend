@@ -4,7 +4,7 @@ const {
   allComments,
   deleteComment,
 } = require("../controllers/CommentController");
-const { isAuth } = require("../middlewares/Authentication");
+const { isAuth } = require("../middleware/Authentication");
 const router = express.Router();
 
 // getting all comments

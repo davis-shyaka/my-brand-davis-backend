@@ -4,11 +4,11 @@ const {
   createMail,
   deleteMail,
 } = require("../controllers/MailController");
-const { isAuth } = require("../middlewares/Authentication");
+const { isAuth } = require("../middleware/Authentication");
 const {
   validateMailCreation,
   mailValidation,
-} = require("../middlewares/validation/MailValidation");
+} = require("../middleware/validation/MailValidation");
 const router = express.Router();
 
 // Get all mail

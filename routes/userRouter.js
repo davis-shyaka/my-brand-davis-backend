@@ -8,12 +8,12 @@ const {
   allUsers,
   deleteUser,
 } = require("../controllers/UserController");
-const { isAuth, isAdmin } = require("../middlewares/Authentication");
+const { isAuth, isAdmin } = require("../middleware/Authentication");
 const {
   validateUserSignUp,
   userValidation,
   validateUserSignIn,
-} = require("../middlewares/validation/UserValidation");
+} = require("../middleware/validation/UserValidation");
 const multer = require("multer");
 
 const storage = multer.diskStorage({});
