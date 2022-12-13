@@ -4,8 +4,8 @@ const userRouter = require("./routes/userRouter");
 const commentRouter = require("./routes/commentRouter");
 const mailRouter = require("./routes/mailRouter");
 
-// my database
-require("./models/db");
+// our database connection
+require("./config/db");
 
 // creating an instance of express
 const app = express();
@@ -26,5 +26,5 @@ app.use("/api", userRouter);
 // register comment routes
 app.use("/api", commentRouter);
 
-// register mail router
+// register mail routes
 app.use("/api", mailRouter);
