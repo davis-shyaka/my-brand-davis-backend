@@ -5,86 +5,47 @@ const cloudinary = require("../helper/imageUpload");
 exports.allPosts = async (req, res) => {
   try {
     const posts = await Post.find();
-    res.json({ success: true, message: "All Posts", posts });
+    res.status(200).json(posts);
   } catch (error) {
     res.json({ success: false, message: error.message });
-  }
-};
-
-// Create posts
-exports.createPost = async (req, res) => {
-  try {
-    const { cover, title, caption, content } = req.body;
-    const post = await Post({
-      title,
-      caption,
-      content,
-    });
-    await post.save();
-    res.json({ success: true, message: "Created post successfully", post });
-  } catch (error) {
-    res.json({ success: false, message: error.message });
-    console.log("Error creating post: ", error.message);
-  }
-};
-
-// Upload cover image
-exports.uploadCoverImage = async (req, res) => {
-  const { post } = req;
-  if (!post) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Forbidden: Unauthorized access" });
-  }
-
-  try {
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "my-brand/coverImages",
-      public_id: `${post._id}_cover`,
-    });
-    await Post.findByIdAndUpdate(post._id, { cover: result.url });
-    res.status(201).json({ success: true, message: "Cover Set Succesfully" });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Server Error: Try again after some time",
-    });
-    console.log("Error while uploading cover image: ", error.message);
   }
 };
 
 // Get individual post
 exports.getPost = async (req, res) => {
   try {
-    const post = await Post.findOne({ _id: req.params.id });
-    res.status(200);
-    res.send(post);
+    let post = await Post.findOne({ _id: req.params.id });
+    if (!post) {
+      res.status(404).send({ success: false, message: "Post doesn't exist!" });
+    } else res.status(200).json(post);
   } catch (error) {
-    res.status(404);
-    res.send({ success: false, message: "Post doesn't exist!" });
-    console.log("Error fetching post: ", error.message);
+    res.status(404).send({ success: false, message: "Post doesn't exist!" });
+  }
+};
+
+// createPost function - To create new post
+exports.createPost = async (req, res) => {
+  try {
+    let newPost = new Post(req.body);
+    await newPost.save();
+    res.status(201).json(newPost);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Error creating post: ${error.message}`,
+    });
   }
 };
 
 // Update posts
 exports.updatePost = async (req, res) => {
   try {
-    const post = await Post.findOne({ _id: req.params.id });
-    const { title, caption, content } = req.body;
-    if (title) {
-      post.title = title;
-    }
-
-    if (caption) {
-      post.caption = caption;
-    }
-    if (content) {
-      post.content = content;
-    }
+    const post = await Post.findOne({ _id: req.params.id }, req.body, {
+      new: true,
+    });
 
     await post.save();
-    res.status(201);
-    res.json({ success: true, message: "Post updated succesfully", post });
+    res.status(200).json(post);
   } catch (error) {
     res.status(404);
     res.json({ success: false, message: "Post doesn't exist!" });
@@ -92,19 +53,22 @@ exports.updatePost = async (req, res) => {
   }
 };
 
-// Delete posts
+// deletePost function - To delete post by id
 exports.deletePost = async (req, res) => {
   try {
     const post = await Post.findOne({ _id: req.params.id });
-    await post.remove();
-    res.status(200);
-    res.json({ success: true, message: "Post deleted succesfully", post });
+    if (!post) {
+      res.status(404).json({ success: false, message: "Post doesn't exist!" });
+    } else {
+      await post.deleteOne();
+      res
+        .status(200)
+        .json({ success: true, message: "Post successfully deleted", post });
+    }
   } catch (error) {
-    res.status(404);
-    res.json({
+    res.status(404).json({
       success: false,
-      message: "Post doesn't exist.",
+      message: error.message,
     });
-    console.log("Error deleting post: ", error.message);
   }
 };

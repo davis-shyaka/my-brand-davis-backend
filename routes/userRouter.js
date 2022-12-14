@@ -1,47 +1,35 @@
-const express = require("express");
-const router = express.Router();
-const {
-  createUser,
-  userSignIn,
-  uploadProfile,
-  signOut,
-  allUsers,
-  deleteUser,
-} = require("../controllers/UserController");
-const { isAuth, isAdmin } = require("../middleware/Authentication");
-const {
-  validateUserSignUp,
-  userValidation,
-  validateUserSignIn,
-} = require("../middleware/validation/UserValidation");
-const multer = require("multer");
+"use strict";
 
-const storage = multer.diskStorage({});
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image")) {
-    cb(null, true);
-  } else {
-    cb("Invalid image file", false);
-  }
+// create App function
+module.exports = (app) => {
+  // post controller
+
+  const user = require("../controllers/UserController");
+
+  // user middleware
+  const {
+    validateUserSignUp,
+    validateUserSignIn,
+    userValidation,
+  } = require("../middleware/validation/UserValidation");
+
+  // authentication middleware
+  const { isAuth, isAdmin } = require("../middleware/Authentication");
+
+  // user Routes
+
+  // get and post requests for /user endpoints
+  app.route("/user/all").get(user.allUsers); //all users
+  app.route("/user/get/:id").get(user.getUser); // individual user
+  app
+    .route("/user/sign_up")
+    .post(validateUserSignUp, userValidation, user.createUser); // create user
+  app
+    .route("/user/log_in")
+    .post(validateUserSignIn, userValidation, user.userSignIn); // user sign in
+  app.route("/user/log_out").post(user.signOut); // user sign-out
+
+  // patch and delete request for /user endpoints
+  // app.route("/user/update/:id").patch(user.updateUser); // update user
+  app.route("/user/delete/:id").delete(user.deleteUser); // delete user
 };
-const uploads = multer({ storage, fileFilter });
-
-// get all users
-router.get("/user/all", isAuth, isAdmin, allUsers);
-
-// create new user
-router.post("/user/create", validateUserSignUp, userValidation, createUser);
-
-// sign in user
-router.post("/user/sign-in", validateUserSignIn, userValidation, userSignIn);
-
-// sign out user
-router.post("/user/sign-out", isAuth, signOut);
-
-// Delete posts
-router.delete("/user/delete/:id", isAuth, isAdmin, deleteUser);
-
-// upload profile image
-router.post("/uploadProfile", isAuth, uploads.single("profile"), uploadProfile);
-
-module.exports = router;

@@ -16,6 +16,20 @@ exports.allComments = async (req, res) => {
   }
 };
 
+// Get individual comment
+exports.getComment = async (req, res) => {
+  try {
+    let comment = await Comment.findOne({ _id: req.params.id });
+    if (!comment) {
+      res
+        .status(404)
+        .send({ success: false, message: "Comment doesn't exist!" });
+    } else res.status(200).json(comment);
+  } catch (error) {
+    res.status(404).send({ success: false, message: error.message });
+  }
+};
+
 // posting a comment on the blog
 exports.createComment = async (req, res) => {
   try {
@@ -23,7 +37,7 @@ exports.createComment = async (req, res) => {
     const id = req.params.id;
     // get the comment text and record post id
     const comment = new Comment({
-      text: req.body.comment,
+      comment: req.body.comment,
       post: id,
       user: req.user.id,
     });
@@ -35,11 +49,7 @@ exports.createComment = async (req, res) => {
     postRelated.comments.push(comment);
     // save and redirect...
     await postRelated.save();
-    res.json({
-      success: true,
-      message: "Comment posted successfully",
-      postRelated,
-    });
+    res.status(201).json(postRelated);
   } catch (error) {
     res.json({ success: false, message: error.message });
     console.log("Error posting comment: ", error.message);
@@ -50,14 +60,20 @@ exports.createComment = async (req, res) => {
 exports.deleteComment = async (req, res) => {
   try {
     const comment = await Comment.findOne({ _id: req.params.id });
-    await comment.remove();
-    res.json({
-      success: true,
-      message: "Comment deleted succesfully",
-      comment,
-    });
+    if (!comment) {
+      res
+        .status(404)
+        .send({ success: false, message: "Comment doesn't exist!" });
+    } else {
+      await comment.deleteOne();
+      res.json({
+        success: true,
+        message: "Comment successfully deleted",
+        comment,
+      });
+    }
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).json({ success: false, message: err.message });
   }
 };

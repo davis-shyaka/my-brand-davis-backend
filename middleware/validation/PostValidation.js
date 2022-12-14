@@ -27,7 +27,8 @@ exports.validatePostCreation = [
 exports.postValidation = (req, res, next) => {
   const result = validationResult(req).array();
   if (!result.length) return next();
-
-  const error = result[0].msg;
-  res.json({ success: false, message: error });
+  else {
+    const error = result[0].msg;
+    res.json({ success: false, message: error });
+  }
 };

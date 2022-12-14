@@ -1,19 +1,29 @@
-const express = require("express");
-const {
-  createComment,
-  allComments,
-  deleteComment,
-} = require("../controllers/CommentController");
-const { isAuth } = require("../middleware/Authentication");
-const router = express.Router();
+"use strict";
 
-// getting all comments
-router.get("/comment/all", allComments);
+// create App function
+module.exports = (app) => {
+  // post controller
 
-// creating a comment
-router.post("/post/comment/create/:id", isAuth, createComment);
+  const comment = require("../controllers/commentController");
 
-// deleting a comment
-router.delete("/comment/delete/:id", isAuth, deleteComment);
+  // comment middleware
+  const {
+    validateCommentCreation,
+    commentValidation,
+  } = require("../middleware/validation/commentValidation");
 
-module.exports = router;
+  // authentication middleware
+  const { isAuth, isAdmin } = require("../middleware/Authentication");
+
+  // comment Routes
+
+  // get and post requests for /comment endpoints
+  app.route("/comment/all").get(comment.allComments); //all comments
+  app.route("/comment/get/:id").get(comment.getComment); // individual comment
+  app
+    .route("/comment/create/on/post/:id")
+    .post(validateCommentCreation, commentValidation, comment.createComment); // create comment
+
+  // patch and delete request for /comment endpoints
+  app.route("/comment/delete/:id").delete(comment.deleteComment); // delete comment
+};

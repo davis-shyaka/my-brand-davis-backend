@@ -7,29 +7,62 @@ const cloudinary = require("../helper/imageUpload");
 exports.allUsers = async (req, res) => {
   try {
     const users = await User.find();
-    res.json({ success: true, message: "All Users: ", users });
+    res.status(200).json(users);
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
 };
 
+// Get individual user
+exports.getUser = async (req, res) => {
+  try {
+    let user = await User.findOne({ _id: req.params.id });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).send({ success: false, message: "User doesn't exist!" });
+  }
+};
+
 // create a new user
 exports.createUser = async (req, res) => {
-  const { surname, givenName, email, password } = req.body;
-  const isNewUser = await User.isThisEmailInUse(email);
-  if (!isNewUser)
-    return res.json({
-      success: false,
-      message: "This email is already in use",
+  try {
+    const { surname, givenName, email, password } = req.body;
+    const isNewUser = await User.isThisEmailInUse(email);
+    if (!isNewUser)
+      return res.status(409).json({
+        success: false,
+        message: "This email is already in use",
+      });
+    const user = await User({
+      surname,
+      givenName,
+      email,
+      password,
     });
-  const user = await User({
-    surname,
-    givenName,
-    email,
-    password,
-  });
-  await user.save();
-  res.json({ success: true, user });
+    await user.save();
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Error creating user: ${error.message}`,
+    });
+  }
+};
+
+// Update user
+exports.updateUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id }, req.body, {
+      new: true,
+    });
+
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404);
+    res.json({ success: false, message: "User doesn't exist!" });
+    console.log("Error updating user: ", error.message);
+  }
 };
 
 // Sign In
@@ -72,11 +105,9 @@ exports.userSignIn = async (req, res) => {
     givenName: user.givenName,
     email: user.email,
     avatar: user.avatar ? user.avatar : "",
-    // token: user.tokens.length ? user.tokens[0].token : "",
     token,
   };
-  req.user = userInfo;
-  res.json({ success: true, user: userInfo });
+  res.status(200).json(userInfo);
 };
 
 // Upload Profile Picture / Avatar
@@ -125,25 +156,26 @@ exports.signOut = async (req, res, next) => {
       await User.findByIdAndUpdate(req.user._id, { tokens: newTokens });
       res
         .status(201)
-        .json({ success: true, message: "Signed Out Succesfully" });
+        .json({ success: true, message: "Signed Out Successfully" });
     } catch (error) {
       console.log("Error while signing out: ", error.message);
     }
   }
 };
 
-// Delete users
+// deleteUser function - To delete user by id
 exports.deleteUser = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id });
-    await user.remove();
-    res.json({ success: true, message: "User deleted succesfully", user });
+    await user.deleteOne();
+    res
+      .status(200)
+      .json({ success: true, message: "User successfully deleted", user });
   } catch (error) {
-    // res.status(404);
+    res.status(404);
     res.json({
       success: false,
-      message: "User couldn't be deleted. Try again later.",
+      message: "User doesn't exist.",
     });
-    console.log("Error deleting user: ", error.message);
   }
 };

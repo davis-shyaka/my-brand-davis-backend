@@ -1,23 +1,29 @@
-const express = require("express");
-const {
-  allMail,
-  createMail,
-  deleteMail,
-} = require("../controllers/MailController");
-const { isAuth } = require("../middleware/Authentication");
-const {
-  validateMailCreation,
-  mailValidation,
-} = require("../middleware/validation/MailValidation");
-const router = express.Router();
+"use strict";
 
-// Get all mail
-router.get("/mail/all", allMail);
+// create App function
+module.exports = (app) => {
+  // post controller
 
-// Create mail
-router.post("/mail/create", validateMailCreation, mailValidation, createMail);
+  const mail = require("../controllers/MailController");
 
-// Delete mail
-router.delete("/mail/delete/:id", isAuth, deleteMail);
+  // mail middleware
+  const {
+    validateMailCreation,
+    mailValidation,
+  } = require("../middleware/validation/mailValidation");
 
-module.exports = router;
+  // authentication middleware
+  const { isAuth, isAdmin } = require("../middleware/Authentication");
+
+  // mail Routes
+
+  // get and post requests for /mail endpoints
+  app.route("/mail/all").get(mail.allMail); //all mails
+  app.route("/mail/get/:id").get(mail.getMail); // individual mail
+  app
+    .route("/mail/create")
+    .post(validateMailCreation, mailValidation, mail.createMail); // create mail
+
+  // patch and delete request for /mail endpoints
+  app.route("/mail/delete/:id").delete(mail.deleteMail); // delete mail
+};

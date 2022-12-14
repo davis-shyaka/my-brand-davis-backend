@@ -31,6 +31,10 @@ const postSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  createdOn: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 // postSchema.pre(

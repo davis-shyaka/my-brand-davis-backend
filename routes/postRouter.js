@@ -1,47 +1,29 @@
-const express = require("express");
-const {
-  allPosts,
-  createPost,
-  getPost,
-  updatePost,
-  deletePost,
-  uploadCoverImage,
-} = require("../controllers/PostController");
-const { isAuth, isAdmin } = require("../middleware/Authentication");
-const {
-  validatePostCreation,
-  postValidation,
-} = require("../middleware/validation/PostValidation");
-const router = express.Router();
+"use strict";
 
-// Get all posts
-router.get("/post/all", allPosts);
+// create App function
+module.exports = (app) => {
+  // post controller
 
-// Create posts
-router.post(
-  "/post/create",
-  isAuth,
-  isAdmin,
-  validatePostCreation,
-  postValidation,
-  createPost
-);
+  const post = require("../controllers/PostController");
 
-// upload cover image
-router.post(
-  "/uploadCover",
-  validatePostCreation,
-  postValidation,
-  uploadCoverImage
-);
+  // post middleware
+  const {
+    validatePostCreation,
+    postValidation,
+  } = require("../middleware/validation/PostValidation");
 
-// Get individual post
-router.get("/post/:id", getPost);
+  // authentication middleware
+  const { isAuth, isAdmin } = require("../middleware/Authentication");
+  // post Routes
 
-// Update posts
-router.patch("/post/update/:id", isAuth, updatePost);
+  // get and post request for /post endpoints
+  app.route("/post/all").get(post.allPosts); //all posts
+  app.route("/post/get/:id").get(post.getPost); // individual post
+  app
+    .route("/post/create")
+    .post(validatePostCreation, postValidation, post.createPost); // create post
 
-// Delete posts
-router.delete("/posts/delete/:id", isAuth, deletePost);
-
-module.exports = router;
+  // patch and delete request for /post endpoints
+  app.route("/post/update/:id").patch(post.updatePost); // update post
+  app.route("/post/delete/:id").delete(post.deletePost); // delete post
+};

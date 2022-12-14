@@ -1,30 +1,40 @@
+"use strict";
+
+// require express and bodyParser
 const express = require("express");
-const postRouter = require("./routes/postRouter");
-const userRouter = require("./routes/userRouter");
-const commentRouter = require("./routes/commentRouter");
-const mailRouter = require("./routes/mailRouter");
 
 // our database connection
 require("./config/db");
 
-// creating an instance of express
+// create express app
 const app = express();
 
-// middleware to be able to parse them in every single request.
+// define port to run express app
+const port = process.env.PORT || 3000;
+
+// use bodyParser middleware on express app to be able to parse them in every single request.
 app.use(express.json());
 
-app.listen(5000, () => {
-  console.log("Server has started! Listening on port 5000...");
+// Add endpoint
+app.get("/", (req, res) => {
+  res.send("Hello World");
 });
 
-// register post routes
-app.use("/api", postRouter);
+// Listen to server
+module.exports = app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
 
-// register user routes
-app.use("/api", userRouter);
+// Import API route
+const postRouter = require("./routes/postRouter"); //importing post route
+const userRouter = require("./routes/userRouter"); //importing user route
+const commentRouter = require("./routes/commentRouter"); //importing comment route
+const mailRouter = require("./routes/mailRouter"); //importing mail route
 
-// register comment routes
-app.use("/api", commentRouter);
+postRouter(app);
 
-// register mail routes
-app.use("/api", mailRouter);
+userRouter(app);
+
+commentRouter(app);
+
+mailRouter(app);
