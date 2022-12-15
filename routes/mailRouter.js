@@ -7,10 +7,10 @@ module.exports = (app) => {
   const mail = require("../controllers/MailController");
 
   // mail middleware
-  const {
-    validateMailCreation,
-    mailValidation,
-  } = require("../middleware/validation/mailValidation");
+
+  const { validate } = require("../middleware/validationMiddleware");
+
+  const validation = require("../middleware/validation/mailValidation");
 
   // authentication middleware
   const { isAuth, isAdmin } = require("../middleware/Authentication");
@@ -22,7 +22,7 @@ module.exports = (app) => {
   app.route("/mail/get/:id").get(mail.getMail); // individual mail
   app
     .route("/mail/create")
-    .post(validateMailCreation, mailValidation, mail.createMail); // create mail
+    .post(validate(validation.mailCreation), mail.createMail); // create mail
 
   // patch and delete request for /mail endpoints
   app.route("/mail/delete/:id").delete(mail.deleteMail); // delete mail
