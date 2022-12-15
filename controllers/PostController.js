@@ -40,12 +40,15 @@ exports.createPost = async (req, res) => {
 // Update posts
 exports.updatePost = async (req, res) => {
   try {
-    const post = await Post.findOne({ _id: req.params.id }, req.body, {
+    const post = await Post.findOneAndUpdate({ _id: req.params.id }, req.body, {
       new: true,
     });
-
-    await post.save();
-    res.status(200).json(post);
+    if (!post) {
+      res.status(404).send({ success: false, message: "Post doesn't exist!" });
+    } else {
+      await post.save();
+      res.status(200).json(post);
+    }
   } catch (error) {
     res.status(404);
     res.json({ success: false, message: "Post doesn't exist!" });

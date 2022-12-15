@@ -2,9 +2,9 @@ const Joi = require("joi");
 
 // validate user sign up
 exports.userSignUp = Joi.object({
-  surname: Joi.string().min(3).max(30).required(),
+  surname: Joi.string().trim().min(3).max(30).required(),
 
-  givenName: Joi.string().min(3).max(30).required(),
+  givenName: Joi.string().trim().min(3).max(30).required(),
 
   password: Joi.string()
     .pattern(
