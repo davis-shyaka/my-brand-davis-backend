@@ -21,7 +21,7 @@ describe("My Brand : Mail Unit", () => {
       name: "Testing with Mocha",
       email: "mail@email.com",
       subject: "Well, either this works",
-      body: "Well, either this works, or I am in trouble",
+      body: "Well, either this works, or I am in trouble.",
     });
     newMail.save(function (err) {
       done();
@@ -93,7 +93,7 @@ describe("My Brand : Mail Unit", () => {
         name: "Test Name",
         email: "mail@email.com",
         subject: "Test Subject",
-        body: "Test Body",
+        body: "Test Body. Keep in mind to make me at least 10 characters long.",
       })
       .end(function (err, res) {
         // the res object should have a status of 201
@@ -108,7 +108,9 @@ describe("My Brand : Mail Unit", () => {
         res.body.name.should.equal("Test Name");
         res.body.email.should.equal("mail@email.com");
         res.body.subject.should.equal("Test Subject");
-        res.body.body.should.equal("Test Body");
+        res.body.body.should.equal(
+          "Test Body. Keep in mind to make me at least 10 characters long."
+        );
         done();
       });
   });

@@ -21,8 +21,8 @@ describe("My Brand : User Unit", () => {
       surname: "SHYAKA",
       givenName: "Davis",
       email: "davis@gmail.com",
-      password: "1234567",
-      confirmPassword: "1234567",
+      password: "Password!23",
+      confirm_password: "Password!123",
     });
     newUser.save(function (err) {
       done();
@@ -92,8 +92,8 @@ describe("My Brand : User Unit", () => {
         surname: "SHYAKA",
         givenName: "Davis",
         email: "shyaka@gmail.com",
-        password: "1234567",
-        confirmPassword: "1234567",
+        password: "Password!23",
+        confirm_password: "Password!23",
       })
       .end(function (err, res) {
         // the res object should have a status of 201
@@ -119,7 +119,7 @@ describe("My Brand : User Unit", () => {
       // send user login details
       .send({
         email: "davis@gmail.com",
-        password: "1234567",
+        password: "Password!23",
       })
       .end((err, res) => {
         if (err) {

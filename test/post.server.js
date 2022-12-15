@@ -20,7 +20,8 @@ describe("My Brand : Post Unit", () => {
     var newPost = new Post({
       title: "Testing with Mocha",
       caption: "This is interesting",
-      content: "Well, either this works, or I am in trouble",
+      content:
+        "Well, either this works, or I am in trouble. This needs to be at least 30 characters long. Don't remember why I chose this. I must be tripping.",
     });
     newPost.save(function (err) {
       done();
@@ -89,7 +90,8 @@ describe("My Brand : Post Unit", () => {
       .send({
         title: "Test Title",
         caption: "Test Caption",
-        content: "Test Content",
+        content:
+          "Well, either this works, or I am in trouble. This needs to be at least 30 characters long. Don't remember why I chose this. I must be tripping.",
       })
       .end(function (err, res) {
         // the res object should have a status of 201
@@ -102,7 +104,9 @@ describe("My Brand : Post Unit", () => {
         res.body.should.have.property("_id");
         res.body.title.should.equal("Test Title");
         res.body.caption.should.equal("Test Caption");
-        res.body.content.should.equal("Test Content");
+        res.body.content.should.equal(
+          "Well, either this works, or I am in trouble. This needs to be at least 30 characters long. Don't remember why I chose this. I must be tripping."
+        );
         done();
       });
   });
@@ -118,7 +122,8 @@ describe("My Brand : Post Unit", () => {
           .send({
             title: "Testing with Chai - Update",
             caption: "Testing caption",
-            content: "Testing content",
+            content:
+              "Testing content. Well, either this works, or I am in trouble. This needs to be at least 30 characters long. Don't remember why I chose this. I must be tripping.",
           })
           // when we get a response from the endpoint
           // in other words,
@@ -133,7 +138,9 @@ describe("My Brand : Post Unit", () => {
             response.body.should.have.property("_id");
             response.body.title.should.equal("Testing with Chai - Update");
             response.body.caption.should.equal("Testing caption");
-            response.body.content.should.equal("Testing content");
+            response.body.content.should.equal(
+              "Testing content. Well, either this works, or I am in trouble. This needs to be at least 30 characters long. Don't remember why I chose this. I must be tripping."
+            );
             done();
           });
       });
