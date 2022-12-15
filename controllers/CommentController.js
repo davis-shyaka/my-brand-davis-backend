@@ -35,24 +35,49 @@ exports.createComment = async (req, res) => {
   try {
     // find out which post you are commenting
     const id = req.params.id;
-    // get the comment text and record post id
-    const comment = new Comment({
-      comment: req.body.comment,
-      post: id,
-      user: req.user.id,
-    });
-    // save comment
-    await comment.save();
-    // get this particular post
-    const postRelated = await Post.findById(id);
-    // push the comment into the post.comments array
-    postRelated.comments.push(comment);
-    // save and redirect...
-    await postRelated.save();
-    res.status(201).json(postRelated);
+    // find out which user is commenting
+    const user = req.user;
+    if (!id) {
+      res
+        .status(404)
+        .json({ success: false, message: "Must select a post to comment!" });
+    } else if (!user) {
+      res
+        .status(405)
+        .json({ success: false, message: "Must be logged in to comment" });
+    } else if (id && user) {
+      // get the comment text and record post id
+      const comment = new Comment({
+        comment: req.body.comment,
+        post: id,
+        user: user.id,
+      });
+      // handling the actual logic of storing the comment along with the right user and to the right post.
+      try {
+        // get this particular post
+        const postRelated = await Post.findById(id);
+        if (!postRelated) {
+          res
+            .status(404)
+            .json({ success: false, message: "Post doesn't exist!" });
+        } else {
+          // save comment
+          await comment.save();
+          // push the comment into the post.comments array
+          postRelated.comments.push(comment);
+          // save and redirect...
+          await postRelated.save();
+          res.status(201).json(postRelated);
+        }
+      } catch (error) {
+        res.status(404).json({
+          success: false,
+          message: `The post you are trying to comment on doesn't exist`,
+        });
+      }
+    }
   } catch (error) {
     res.json({ success: false, message: error.message });
-    console.log("Error posting comment: ", error.message);
   }
 };
 

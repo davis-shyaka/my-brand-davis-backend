@@ -7,10 +7,9 @@ module.exports = (app) => {
   const comment = require("../controllers/commentController");
 
   // comment middleware
-  const {
-    validateCommentCreation,
-    commentValidation,
-  } = require("../middleware/validation/commentValidation");
+  const { validate } = require("../middleware/validationMiddleware");
+
+  const validation = require("../middleware/validation/commentValidation");
 
   // authentication middleware
   const { isAuth, isAdmin } = require("../middleware/Authentication");
@@ -22,7 +21,7 @@ module.exports = (app) => {
   app.route("/comment/get/:id").get(comment.getComment); // individual comment
   app
     .route("/comment/create/on/post/:id")
-    .post(validateCommentCreation, commentValidation, comment.createComment); // create comment
+    .post(isAuth, validate(validation.commentCreation), comment.createComment); // create comment
 
   // patch and delete request for /comment endpoints
   app.route("/comment/delete/:id").delete(comment.deleteComment); // delete comment
