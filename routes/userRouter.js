@@ -18,17 +18,17 @@ module.exports = (app) => {
   // user Routes
 
   // get and post requests for /user endpoints
-  app.route("/user/all").get(user.allUsers); //all users
-  app.route("/user/get/:id").get(user.getUser); // individual user
+  app.route("/user/all").get([isAuth, isAdmin], user.allUsers); //all users
+  app.route("/user/get/:id").get([isAuth, isAdmin], user.getUser); // individual user
   app
     .route("/user/sign_up")
     .post(validate(validation.userSignUp), user.createUser); // create user
   app
     .route("/user/log_in")
     .post(validate(validation.userSignIn), user.userSignIn); // user sign in
-  app.route("/user/log_out").post(user.signOut); // user sign-out
+  app.route("/user/log_out").post(isAuth, user.signOut); // user sign-out
 
   // patch and delete request for /user endpoints
   // app.route("/user/update/:id").patch(user.updateUser); // update user
-  app.route("/user/delete/:id").delete(user.deleteUser); // delete user
+  app.route("/user/delete/:id").delete([isAuth, isAdmin], user.deleteUser); // delete user
 };

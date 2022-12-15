@@ -25,5 +25,5 @@ module.exports = (app) => {
     .post(validate(validation.mailCreation), mail.createMail); // create mail
 
   // patch and delete request for /mail endpoints
-  app.route("/mail/delete/:id").delete(mail.deleteMail); // delete mail
+  app.route("/mail/delete/:id").delete([isAuth, isAdmin], mail.deleteMail); // delete mail
 };

@@ -12,10 +12,24 @@ var server = require("../server");
 
 // Import Mail Model
 var Mail = require("../models/MailModel");
+const User = require("../models/UserModel");
 
 // use chaiHttp for making the actual HTTP requests
 chai.use(chaiHttp);
 describe("My Brand : Mail Unit", () => {
+  before((done) => {
+    const newUser = new User({
+      surname: "SHYAKA",
+      givenName: "Davis",
+      email: "davis@gmail.com",
+      password: "Password!23",
+      confirm_password: "Password!23",
+      isAdmin: true,
+    });
+    newUser.save((err, user) => {
+      done();
+    });
+  });
   beforeEach((done) => {
     var newMail = new Mail({
       name: "Testing with Mocha",
@@ -115,20 +129,47 @@ describe("My Brand : Mail Unit", () => {
       });
   });
 
-  it("should delete a Message on /mail/delete/<id> DELETE without Auth Token", function (done) {
+  it("should delete a Message on /mail/delete/<id> DELETE with AUTH Token", function (done) {
     chai
       .request(server)
-      .get("/mail/all")
-      .end(function (err, res) {
-        chai
-          .request(server)
-          .delete("/mail/delete/" + res.body[0]._id)
-          .end(function (error, response) {
-            response.should.have.status(200);
-            response.body.should.have.property("message");
-            response.body.message.should.equal("Mail successfully deleted");
-            done();
-          });
+      .post("/user/log_in")
+      // send user login details
+      .send({
+        email: "davis@gmail.com",
+        password: "Password!23",
+      })
+      .end((err, res) => {
+        if (err) {
+          console.log(err);
+          done(err);
+        } else {
+          // console.log("this runs the login part");
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.should.be.a("object");
+          res.body.should.have.property("surname");
+          res.body.should.have.property("givenName");
+          res.body.should.have.property("email");
+          res.body.should.have.property("token");
+          var token = res.body.token;
+          chai
+            .request(server)
+            .get("/mail/all")
+            .end(function (err, res) {
+              chai
+                .request(server)
+                .delete("/mail/delete/" + res.body[0]._id)
+                .set("Authorization", "JWT " + token)
+                .end(function (error, response) {
+                  response.should.have.status(200);
+                  response.body.should.have.property("message");
+                  response.body.message.should.equal(
+                    "Mail successfully deleted"
+                  );
+                  done();
+                });
+            });
+        }
       });
   });
 });

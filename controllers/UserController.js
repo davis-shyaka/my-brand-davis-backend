@@ -155,8 +155,8 @@ exports.signOut = async (req, res, next) => {
     try {
       await User.findByIdAndUpdate(req.user._id, { tokens: newTokens });
       res
-        .status(201)
-        .json({ success: true, message: "Signed Out Successfully" });
+        .status(200)
+        .json({ success: true, message: "Logged out successfully" });
     } catch (error) {
       console.log("Error while signing out: ", error.message);
     }
