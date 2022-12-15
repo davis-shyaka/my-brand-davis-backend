@@ -7,11 +7,10 @@ module.exports = (app) => {
   const user = require("../controllers/UserController");
 
   // user middleware
-  const {
-    validateUserSignUp,
-    validateUserSignIn,
-    userValidation,
-  } = require("../middleware/validation/UserValidation");
+  const { validate } = require("../middleware/validationMiddleware");
+
+  // user validation schemas
+  const validation = require("../middleware/validation/UserValidation");
 
   // authentication middleware
   const { isAuth, isAdmin } = require("../middleware/Authentication");
@@ -23,10 +22,10 @@ module.exports = (app) => {
   app.route("/user/get/:id").get(user.getUser); // individual user
   app
     .route("/user/sign_up")
-    .post(validateUserSignUp, userValidation, user.createUser); // create user
+    .post(validate(validation.userSignUp), user.createUser); // create user
   app
     .route("/user/log_in")
-    .post(validateUserSignIn, userValidation, user.userSignIn); // user sign in
+    .post(validate(validation.userSignIn), user.userSignIn); // user sign in
   app.route("/user/log_out").post(user.signOut); // user sign-out
 
   // patch and delete request for /user endpoints

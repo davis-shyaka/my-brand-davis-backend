@@ -1,53 +1,44 @@
-const { check, validationResult } = require("express-validator");
+const Joi = require("joi");
 
-exports.validateUserSignUp = [
-  check("surname")
-    .trim()
-    .not()
-    .isEmpty()
-    .withMessage("Name cannot be empty")
-    .isString()
-    .withMessage("This must be a real name")
-    .isLength({ min: 3, max: 20 })
-    .withMessage("Name must be 3 - 20 characters"),
-  check("givenName")
-    .trim()
-    .not()
-    .isEmpty()
-    .withMessage("Name cannot be empty")
-    .isString()
-    .withMessage("This must be a real name")
-    .isLength({ min: 3, max: 20 })
-    .withMessage("Name must be within 3 - 20 characters"),
-  check("email").normalizeEmail().isEmail().withMessage("Invalid email"),
-  check("password")
-    .trim()
-    .not()
-    .isEmpty()
-    .withMessage("Password cannot be empty")
-    .isLength({ min: 7, max: 20 })
-    .withMessage("Password must be 7 - 20 characters"),
-  check("confirmPassword")
-    .trim()
-    .not()
-    .isEmpty()
-    .custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Passwords do not match");
-      }
-      return true;
+// validate user sign up
+exports.userSignUp = Joi.object({
+  surname: Joi.string().trim().min(3).max(30).required(),
+
+  givenName: Joi.string().trim().min(3).max(30).required(),
+
+  password: Joi.string()
+    .pattern(
+      new RegExp(
+        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
+      )
+    )
+    .required()
+    .messages({
+      "string.pattern.base": `Password should be at least 8 characters long, contain at least 1 uppercase, 1 lowercase, 1 digit, and one special case character.`,
+      "string.empty": `Password cannot be empty`,
+      "any.required": `Password is required`,
     }),
-];
 
-exports.userValidation = (req, res, next) => {
-  const result = validationResult(req).array();
-  if (!result.length) return next();
+  confirm_password: Joi.any().valid(Joi.ref("password")).required().messages({
+    "any.only": "Passwords must match",
+  }),
 
-  const error = result[0].msg;
-  res.json({ success: false, message: error });
-};
+  access_token: [Joi.string(), Joi.number()],
 
-exports.validateUserSignIn = [
-  check("email").trim().isEmail().withMessage("Email is required"),
-  check("password").trim().not().isEmpty().withMessage("Password is required"),
-];
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+})
+  .with("username", "givenName")
+  .xor("password", "access_token")
+  .with("password", "confirm_password");
+
+// validate user sign in
+exports.userSignIn = Joi.object({
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+  password: Joi.string().required(),
+}).with("email", "password");
