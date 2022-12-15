@@ -168,7 +168,7 @@ describe("My Brand : User Unit", () => {
   //       });
   //   });
 
-  it("should delete a User on /user/delete/<id> DELETE without Auth Token", function (done) {
+  it("should delete a User on /user/delete/<id> DELETE with Auth Token", function (done) {
     chai
       .request(server)
       .get("/user/all")

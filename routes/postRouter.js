@@ -19,11 +19,17 @@ module.exports = (app) => {
   app.route("/post/get/:id").get(post.getPost); // individual post
   app
     .route("/post/create")
-    .post(validate(validation.postCreation), post.createPost); // create post
+    .post(
+      [isAuth, isAdmin, validate(validation.postCreation)],
+      post.createPost
+    ); // create post
 
   // patch and delete request for /post endpoints
   app
     .route("/post/update/:id")
-    .patch(validate(validation.postCreation), post.updatePost); // update post
-  app.route("/post/delete/:id").delete(post.deletePost); // delete post
+    .patch(
+      [isAuth, isAdmin, validate(validation.postCreation)],
+      post.updatePost
+    ); // update post
+  app.route("/post/delete/:id").delete([isAuth, isAdmin], post.deletePost); // delete post
 };

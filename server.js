@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 
 // use bodyParser middleware on express app to be able to parse them in every single request.
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: false }));
 // Add endpoint
 app.get("/", (req, res) => {
   res.send("Hello World");

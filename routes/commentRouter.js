@@ -18,11 +18,16 @@ module.exports = (app) => {
 
   // get and post requests for /comment endpoints
   app.route("/comment/all").get(comment.allComments); //all comments
-  app.route("/comment/get/:id").get(comment.getComment); // individual comment
+  app.route("/comment/get/:id").get([isAuth, isAdmin], comment.getComment); // individual comment
   app
     .route("/comment/create/on/post/:id")
-    .post(isAuth, validate(validation.commentCreation), comment.createComment); // create comment
+    .post(
+      [isAuth, validate(validation.commentCreation)],
+      comment.createComment
+    ); // create comment
 
   // patch and delete request for /comment endpoints
-  app.route("/comment/delete/:id").delete(comment.deleteComment); // delete comment
+  app
+    .route("/comment/delete/:id")
+    .delete([isAuth, isAdmin], comment.deleteComment); // delete comment
 };
