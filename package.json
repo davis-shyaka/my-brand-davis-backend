@@ -5,9 +5,13 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "build": "babel lib -d dist",
-    "start": "npm run build && nodemon dist/server.cjs",
-    "serve": "node dist/server.cjs"
+    "build": "npx babel lib/server.js -d dist -w",
+    "dev": "nodemon lib/server.js",
+    "start": "npm run build && nodemon dist/server.js",
+    "serve": "node dist/server.js",
+    "test": "nyc mocha --require @babel/register",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
+    "check-coverage": "istanbul cover node_modules/mocha/bin/_mocha && istanbul check-coverage"
   },
   "keywords": [],
   "author": "SHYAKA Davis",
@@ -21,12 +25,16 @@
   "devDependencies": {
     "@babel/cli": "^7.19.3",
     "@babel/core": "^7.20.5",
+    "@babel/node": "^7.20.5",
     "@babel/preset-env": "^7.20.2",
+    "@babel/register": "^7.18.9",
     "chai": "^4.3.7",
     "chai-http": "^4.3.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "mocha": "^10.2.0",
     "mongoose": "^6.8.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "nyc": "^15.1.0"
   }
 }

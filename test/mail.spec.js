@@ -8,11 +8,11 @@ const should = chai.should();
 import mongoose from "mongoose";
 
 // Import server
-import server from "../server.js";
+import server from "../lib/server.js";
 
 // Import Mail Model
-import Mail from "../models/MailModel.js";
-import User from "../models/UserModel.js";
+import Mail from "../lib/models/MailModel.js";
+import User from "../lib/models/UserModel.js";
 
 // use chaiHttp for making the actual HTTP requests
 chai.use(chaiHttp);
