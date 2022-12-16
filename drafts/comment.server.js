@@ -14,32 +14,45 @@ var server = require("../server");
 var Comment = require("../models/CommentModel");
 var Post = require("../models/PostModel");
 var User = require("../models/UserModel");
+const Comment = require("../models/CommentModel");
 
 // use chaiHttp for making the actual HTTP requests
 chai.use(chaiHttp);
 describe("My Brand : Comment Unit", () => {
   beforeEach((done) => {
     var newUser = new User({
-      surname: "Testing with Chai",
-      givenName: "Testing",
-      email: "Post content",
-      password: "password123",
-      confirmPassword: "password123",
+      surname: "Commenter",
+      givenName: "Commenter",
+      email: "commenter@gmail.com",
+      password: "Password!23",
+      confirm_password: "Password!23",
     });
     newUser.save((err) => {
       done();
     });
+  });
+
+  beforeEach((done) => {
     var newPost = new Post({
       title: "Testing with Chai",
       caption: "Testing",
-      content: "Post content",
+      content:
+        "Post content. Content must be somewhat large, or longer. I'm writing till this gets to like 30 or something characters.",
     });
     newPost.save((err) => {
       done();
     });
   });
+  beforeEach((done) => {
+    var newComment = new Comment({
+      comment: "Testing with Chai",
+    });
+    newComment.save((err) => {
+      done();
+    });
+  });
 
-  afterEach(function (done) {
+  afterEach((done) => {
     User.collection
       .drop()
       .then(function () {
@@ -50,6 +63,8 @@ describe("My Brand : Comment Unit", () => {
         console.warn("Collection may not exist!");
       });
     done();
+  });
+  afterEach(function (done) {
     Post.collection
       .drop()
       .then(function () {

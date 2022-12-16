@@ -17,7 +17,11 @@ exports.allUsers = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.params.id });
-    res.status(200).json(user);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    } else res.status(200).json(user);
   } catch (error) {
     res.status(404).send({ success: false, message: "User doesn't exist!" });
   }

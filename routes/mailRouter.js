@@ -18,8 +18,8 @@ module.exports = (app) => {
   // mail Routes
 
   // get and post requests for /mail endpoints
-  app.route("/mail/all").get(mail.allMail); //all mails
-  app.route("/mail/get/:id").get(mail.getMail); // individual mail
+  app.route("/mail/all").get([isAuth, isAdmin], mail.allMail); //all mails
+  app.route("/mail/get/:id").get([isAuth, isAdmin], mail.getMail); // individual mail
   app
     .route("/mail/create")
     .post(validate(validation.mailCreation), mail.createMail); // create mail

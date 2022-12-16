@@ -211,7 +211,7 @@ describe("My Brand : Post Unit", () => {
         }
       });
   });
-  it("should delete a Post on /post/delete/<id> DELETE without AUTH Token", function (done) {
+  it("should delete a Post on /post/delete/<id> DELETE with AUTH Token", function (done) {
     chai
       .request(server)
       .post("/user/log_in")
