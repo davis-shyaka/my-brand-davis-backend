@@ -1,7 +1,7 @@
-const Joi = require("joi");
+import Joi from "joi";
 
 // validate mail creation
-exports.mailCreation = Joi.object({
+const schema = Joi.object({
   name: Joi.string().trim().min(3).max(50).required(),
 
   email: Joi.string().email({
@@ -15,3 +15,5 @@ exports.mailCreation = Joi.object({
 })
   .with("name", "email")
   .with("subject", "body");
+
+export { schema as mailCreation };

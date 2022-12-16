@@ -1,8 +1,8 @@
-const Post = require("../models/PostModel");
-const cloudinary = require("../helper/imageUpload");
+import Post from "../models/PostModel.js";
+import cloudinary from "../helper/imageUpload.js";
 
 // Get all posts
-exports.allPosts = async (req, res) => {
+const allPosts = async (req, res) => {
   try {
     const posts = await Post.find();
     res.status(200).json(posts);
@@ -12,7 +12,7 @@ exports.allPosts = async (req, res) => {
 };
 
 // Get individual post
-exports.getPost = async (req, res) => {
+const getPost = async (req, res) => {
   try {
     let post = await Post.findOne({ _id: req.params.id });
     if (!post) {
@@ -24,7 +24,7 @@ exports.getPost = async (req, res) => {
 };
 
 // createPost function - To create new post
-exports.createPost = async (req, res) => {
+const createPost = async (req, res) => {
   try {
     let newPost = new Post(req.body);
     await newPost.save();
@@ -38,7 +38,7 @@ exports.createPost = async (req, res) => {
 };
 
 // Update posts
-exports.updatePost = async (req, res) => {
+const updatePost = async (req, res) => {
   try {
     const post = await Post.findOneAndUpdate({ _id: req.params.id }, req.body, {
       new: true,
@@ -57,7 +57,7 @@ exports.updatePost = async (req, res) => {
 };
 
 // deletePost function - To delete post by id
-exports.deletePost = async (req, res) => {
+const deletePost = async (req, res) => {
   try {
     const post = await Post.findOne({ _id: req.params.id });
     if (!post) {
@@ -75,3 +75,5 @@ exports.deletePost = async (req, res) => {
     });
   }
 };
+
+export default { allPosts, getPost, createPost, updatePost, deletePost };

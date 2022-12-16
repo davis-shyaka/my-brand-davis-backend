@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/UserModel");
+import jwt from "jsonwebtoken";
+import User from "../models/UserModel.js";
 
-exports.isAuth = async (req, res, next) => {
+const isAuth = async (req, res, next) => {
   if (req.headers && req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
 
@@ -37,7 +37,7 @@ exports.isAuth = async (req, res, next) => {
 };
 
 // admin middleware
-exports.isAdmin = async (req, res, next) => {
+const isAdmin = async (req, res, next) => {
   try {
     let user = await User.findOne({ _id: req.user.id });
     if (!user) {
@@ -60,3 +60,5 @@ exports.isAdmin = async (req, res, next) => {
     res.json({ success: false, message: `Forbidden: ${error.message}` });
   }
 };
+
+export { isAuth, isAdmin };

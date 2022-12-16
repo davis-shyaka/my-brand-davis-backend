@@ -1,7 +1,7 @@
-const Mail = require("../models/MailModel");
+import Mail from "../models/MailModel.js";
 
 // Get all mail
-exports.allMail = async (req, res) => {
+const allMail = async (req, res) => {
   try {
     const mail = await Mail.find();
     res.status(200).json(mail);
@@ -11,7 +11,7 @@ exports.allMail = async (req, res) => {
 };
 
 // Get individual mail
-exports.getMail = async (req, res) => {
+const getMail = async (req, res) => {
   try {
     let mail = await Mail.findOne({ _id: req.params.id });
     if (!mail) {
@@ -23,23 +23,21 @@ exports.getMail = async (req, res) => {
 };
 
 // create a new message
-exports.createMail = async (req, res) => {
+const createMail = async (req, res) => {
   try {
     let newMail = new Mail(req.body);
     await newMail.save();
     res.status(201).json(newMail);
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: `Error sending mail: ${error.message}`,
-      });
+    res.status(500).json({
+      success: false,
+      message: `Error sending mail: ${error.message}`,
+    });
   }
 };
 
 // Delete mail
-exports.deleteMail = async (req, res) => {
+const deleteMail = async (req, res) => {
   try {
     const mail = await Mail.findOne({ _id: req.params.id });
     if (!mail) {
@@ -57,3 +55,4 @@ exports.deleteMail = async (req, res) => {
     });
   }
 };
+export default { allMail, getMail, createMail, deleteMail };

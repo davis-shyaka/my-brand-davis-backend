@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Comment = require("../models/CommentModel");
+import mongoose from "mongoose";
+import Comment from "../models/CommentModel.js";
 
 const postSchema = mongoose.Schema({
   cover: String,
@@ -55,4 +55,5 @@ postSchema.pre("remove", function (next) {
   next();
 });
 
-module.exports = mongoose.model("Post", postSchema);
+const Post = mongoose.model("Post", postSchema);
+export default Post;

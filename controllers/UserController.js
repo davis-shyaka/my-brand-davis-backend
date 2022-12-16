@@ -1,10 +1,10 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/UserModel");
-const sharp = require("sharp");
-const cloudinary = require("../helper/imageUpload");
+import jwt from "jsonwebtoken";
+import User from "../models/UserModel.js";
+import sharp from "sharp";
+import cloudinary from "../helper/imageUpload.js";
 
 // Get all users
-exports.allUsers = async (req, res) => {
+const allUsers = async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
@@ -14,7 +14,7 @@ exports.allUsers = async (req, res) => {
 };
 
 // Get individual user
-exports.getUser = async (req, res) => {
+const getUser = async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.params.id });
     if (!user) {
@@ -28,7 +28,7 @@ exports.getUser = async (req, res) => {
 };
 
 // create a new user
-exports.createUser = async (req, res) => {
+const createUser = async (req, res) => {
   try {
     const { surname, givenName, email, password } = req.body;
     const isNewUser = await User.isThisEmailInUse(email);
@@ -54,7 +54,7 @@ exports.createUser = async (req, res) => {
 };
 
 // Update user
-exports.updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id }, req.body, {
       new: true,
@@ -70,7 +70,7 @@ exports.updateUser = async (req, res) => {
 };
 
 // Sign In
-exports.userSignIn = async (req, res) => {
+const userSignIn = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -115,7 +115,7 @@ exports.userSignIn = async (req, res) => {
 };
 
 // Upload Profile Picture / Avatar
-exports.uploadProfile = async (req, res) => {
+const uploadProfile = async (req, res) => {
   const { user } = req;
   if (!user) {
     return res
@@ -143,7 +143,7 @@ exports.uploadProfile = async (req, res) => {
 };
 
 // Sign Out
-exports.signOut = async (req, res, next) => {
+const signOut = async (req, res, next) => {
   if (req.headers && req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
     if (!token) {
@@ -168,7 +168,7 @@ exports.signOut = async (req, res, next) => {
 };
 
 // deleteUser function - To delete user by id
-exports.deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id });
     await user.deleteOne();
@@ -182,4 +182,15 @@ exports.deleteUser = async (req, res) => {
       message: "User doesn't exist.",
     });
   }
+};
+
+export default {
+  allUsers,
+  getUser,
+  createUser,
+  userSignIn,
+  signOut,
+  updateUser,
+  deleteUser,
+  uploadProfile,
 };

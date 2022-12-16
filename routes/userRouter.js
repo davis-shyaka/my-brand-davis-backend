@@ -1,20 +1,16 @@
-"use strict";
+import user from "../controllers/UserController.js";
+
+// user middleware
+import validates from "../middleware/validationMiddleware.js";
+
+// user validation schemas
+import validation from "../middleware/validation/UserValidation.js";
+
+// authentication middleware
+import { isAuth, isAdmin } from "../middleware/Authentication.js";
 
 // create App function
-module.exports = (app) => {
-  // post controller
-
-  const user = require("../controllers/UserController");
-
-  // user middleware
-  const { validate } = require("../middleware/validationMiddleware");
-
-  // user validation schemas
-  const validation = require("../middleware/validation/UserValidation");
-
-  // authentication middleware
-  const { isAuth, isAdmin } = require("../middleware/Authentication");
-
+export default (app) => {
   // user Routes
 
   // get and post requests for /user endpoints
@@ -22,10 +18,10 @@ module.exports = (app) => {
   app.route("/user/get/:id").get([isAuth, isAdmin], user.getUser); // individual user
   app
     .route("/user/sign_up")
-    .post(validate(validation.userSignUp), user.createUser); // create user
+    .post(validates(validation.userSignUp), user.createUser); // create user
   app
     .route("/user/log_in")
-    .post(validate(validation.userSignIn), user.userSignIn); // user sign in
+    .post(validates(validation.userSignIn), user.userSignIn); // user sign in
   app.route("/user/log_out").post(isAuth, user.signOut); // user sign-out
 
   // patch and delete request for /user endpoints

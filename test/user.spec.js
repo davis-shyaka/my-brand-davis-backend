@@ -1,17 +1,17 @@
-// Endpoint testing with mocha and chai and chai-http
+/// Endpoint testing with mocha and chai and chai-http
 
 // Import libraries
-const chai = require("chai");
-const chaiHttp = require("chai-http");
+import chai from "chai";
+import chaiHttp from "chai-http";
 
 const should = chai.should();
-var mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // Import server
-var server = require("../server");
+import server from "../server.js";
 
 // Import User Model
-var User = require("../models/UserModel");
+import User from "../models/UserModel.js";
 
 // use chaiHttp for making the actual HTTP requests
 chai.use(chaiHttp);

@@ -1,4 +1,4 @@
-exports.validate = (schema) => (req, res, next) => {
+const validate = (schema) => (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error) {
     res.status(422).send(error.details[0].message);
@@ -6,3 +6,5 @@ exports.validate = (schema) => (req, res, next) => {
     next();
   }
 };
+
+export default validate;

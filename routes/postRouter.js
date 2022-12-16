@@ -1,17 +1,16 @@
-"use strict";
+// post controller
+import post from "../controllers/PostController.js";
+
+// post middleware
+import validates from "../middleware/validationMiddleware.js";
+
+import { postCreation } from "../middleware/validation/PostValidation.js";
+
+// authentication middleware
+import { isAuth, isAdmin } from "../middleware/Authentication.js";
 
 // create App function
-module.exports = (app) => {
-  // post controller
-  const post = require("../controllers/PostController");
-
-  // post middleware
-  const { validate } = require("../middleware/validationMiddleware");
-
-  const validation = require("../middleware/validation/PostValidation");
-
-  // authentication middleware
-  const { isAuth, isAdmin } = require("../middleware/Authentication");
+export default (app) => {
   // post Routes
 
   // get and post request for /post endpoints
@@ -19,17 +18,11 @@ module.exports = (app) => {
   app.route("/post/get/:id").get(post.getPost); // individual post
   app
     .route("/post/create")
-    .post(
-      [isAuth, isAdmin, validate(validation.postCreation)],
-      post.createPost
-    ); // create post
+    .post([isAuth, isAdmin, validates(postCreation)], post.createPost); // create post
 
   // patch and delete request for /post endpoints
   app
     .route("/post/update/:id")
-    .patch(
-      [isAuth, isAdmin, validate(validation.postCreation)],
-      post.updatePost
-    ); // update post
+    .patch([isAuth, isAdmin, validates(postCreation)], post.updatePost); // update post
   app.route("/post/delete/:id").delete([isAuth, isAdmin], post.deletePost); // delete post
 };

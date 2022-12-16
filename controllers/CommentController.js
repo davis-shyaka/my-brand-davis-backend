@@ -1,8 +1,8 @@
-const Comment = require("../models/CommentModel");
-const Post = require("../models/PostModel");
+import Comment from "../models/CommentModel.js";
+import Post from "../models/PostModel.js";
 
 // get all comments
-exports.allComments = async (req, res) => {
+const allComments = async (req, res) => {
   try {
     // const comments = await Comment.find();
     // res.json({ success: true, message: "All comments", comments });
@@ -17,7 +17,7 @@ exports.allComments = async (req, res) => {
 };
 
 // Get individual comment
-exports.getComment = async (req, res) => {
+const getComment = async (req, res) => {
   try {
     let comment = await Comment.findOne({ _id: req.params.id });
     if (!comment) {
@@ -31,7 +31,7 @@ exports.getComment = async (req, res) => {
 };
 
 // posting a comment on the blog
-exports.createComment = async (req, res) => {
+const createComment = async (req, res) => {
   try {
     // find out which post you are commenting
     const id = req.params.id;
@@ -82,7 +82,7 @@ exports.createComment = async (req, res) => {
 };
 
 // delete a comment
-exports.deleteComment = async (req, res) => {
+const deleteComment = async (req, res) => {
   try {
     const comment = await Comment.findOne({ _id: req.params.id });
     if (!comment) {
@@ -102,3 +102,5 @@ exports.deleteComment = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
+export default { allComments, getComment, createComment, deleteComment };

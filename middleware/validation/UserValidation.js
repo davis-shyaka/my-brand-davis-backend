@@ -1,7 +1,7 @@
-const Joi = require("joi");
+import Joi from "joi";
 
 // validate user sign up
-exports.userSignUp = Joi.object({
+const userSignUp = Joi.object({
   surname: Joi.string().trim().min(3).max(30).required(),
 
   givenName: Joi.string().trim().min(3).max(30).required(),
@@ -35,10 +35,12 @@ exports.userSignUp = Joi.object({
   .with("password", "confirm_password");
 
 // validate user sign in
-exports.userSignIn = Joi.object({
+const userSignIn = Joi.object({
   email: Joi.string().email({
     minDomainSegments: 2,
     tlds: { allow: ["com", "net"] },
   }),
   password: Joi.string().required(),
 }).with("email", "password");
+
+export default { userSignUp, userSignIn };
