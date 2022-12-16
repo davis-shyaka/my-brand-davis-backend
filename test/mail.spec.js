@@ -21,7 +21,7 @@ describe("My Brand : Mail Unit", () => {
     const newUser = new User({
       surname: "SHYAKA",
       givenName: "Davis",
-      email: "davis@gmail.com",
+      email: "admin@gmail.com",
       password: "Password!23",
       confirm_password: "Password!23",
       isAdmin: true,
@@ -58,43 +58,70 @@ describe("My Brand : Mail Unit", () => {
   it("should list ALL Mail on /mail/all GET", function (done) {
     chai
       .request(server)
-      .get("/mail/all")
-      .end(function (err, res) {
-        if (err) done(err);
-        else {
-          res.should.have.status(200);
-          res.should.be.json;
-          res.body.should.be.a("array");
-          res.body[0].should.have.property("name");
-          res.body[0].should.have.property("email");
-          res.body[0].should.have.property("subject");
-          res.body[0].should.have.property("body");
-          res.body[0].should.have.property("_id");
-          done();
-        }
+      .post("/user/log_in")
+      // send user login details
+      .send({
+        email: "admin@gmail.com",
+        password: "Password!23",
+      })
+      .end((err, res) => {
+        res.body.should.have.property("token");
+        var token = res.body.token;
+        chai
+          .request(server)
+          .get("/mail/all")
+          .set("Authorization", "JWT " + token)
+          .end(function (err, res) {
+            if (err) done(err);
+            else {
+              res.should.have.status(200);
+              res.should.be.json;
+              res.body.should.be.a("array");
+              res.body[0].should.have.property("name");
+              res.body[0].should.have.property("email");
+              res.body[0].should.have.property("subject");
+              res.body[0].should.have.property("body");
+              res.body[0].should.have.property("_id");
+              done();
+            }
+          });
       });
   });
   it("should list ONE Message on /mail/get GET", function (done) {
     chai
       .request(server)
-      .get("/mail/all")
-      .end(function (err, res) {
+      .post("/user/log_in")
+      // send user login details
+      .send({
+        email: "admin@gmail.com",
+        password: "Password!23",
+      })
+      .end((err, res) => {
+        res.body.should.have.property("token");
+        var token = res.body.token;
         chai
           .request(server)
-          .get("/mail/get/" + res.body[0]._id)
-          .end((error, response) => {
-            if (error) done(error);
-            else {
-              response.should.have.status(200);
-              response.should.be.json;
-              response.body.should.be.a("object");
-              response.body.should.have.property("name");
-              response.body.should.have.property("email");
-              response.body.should.have.property("subject");
-              response.body.should.have.property("body");
-              response.body.should.have.property("_id");
-              done();
-            }
+          .get("/mail/all")
+          .set("Authorization", "JWT " + token)
+          .end(function (err, res) {
+            chai
+              .request(server)
+              .get("/mail/get/" + res.body[0]._id)
+              .set("Authorization", "JWT " + token)
+              .end((error, response) => {
+                if (error) done(error);
+                else {
+                  response.should.have.status(200);
+                  response.should.be.json;
+                  response.body.should.be.a("object");
+                  response.body.should.have.property("name");
+                  response.body.should.have.property("email");
+                  response.body.should.have.property("subject");
+                  response.body.should.have.property("body");
+                  response.body.should.have.property("_id");
+                  done();
+                }
+              });
           });
       });
   });
@@ -135,41 +162,33 @@ describe("My Brand : Mail Unit", () => {
       .post("/user/log_in")
       // send user login details
       .send({
-        email: "davis@gmail.com",
+        email: "admin@gmail.com",
         password: "Password!23",
       })
       .end((err, res) => {
-        if (err) {
-          console.log(err);
-          done(err);
-        } else {
-          // console.log("this runs the login part");
-          res.should.have.status(200);
-          res.should.be.json;
-          res.body.should.be.a("object");
-          res.body.should.have.property("surname");
-          res.body.should.have.property("givenName");
-          res.body.should.have.property("email");
-          res.body.should.have.property("token");
-          var token = res.body.token;
-          chai
-            .request(server)
-            .get("/mail/all")
-            .end(function (err, res) {
-              chai
-                .request(server)
-                .delete("/mail/delete/" + res.body[0]._id)
-                .set("Authorization", "JWT " + token)
-                .end(function (error, response) {
+        res.body.should.have.property("token");
+        var token = res.body.token;
+        chai
+          .request(server)
+          .get("/mail/all")
+          .set("Authorization", "JWT " + token)
+          .end(function (err, res) {
+            chai
+              .request(server)
+              .delete("/mail/delete/" + res.body[0]._id)
+              .set("Authorization", "JWT " + token)
+              .end((error, response) => {
+                if (error) done(error);
+                else {
                   response.should.have.status(200);
                   response.body.should.have.property("message");
                   response.body.message.should.equal(
                     "Mail successfully deleted"
                   );
                   done();
-                });
-            });
-        }
+                }
+              });
+          });
       });
   });
 });

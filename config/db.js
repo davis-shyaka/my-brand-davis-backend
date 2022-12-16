@@ -3,8 +3,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // Connect to mongoose
+mongoose.set("strictQuery", true);
 mongoose
-  .connect(process.env.MONGO_URI, {
+  .connect(process.env.DEV_MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

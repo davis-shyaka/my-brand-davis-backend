@@ -38,3 +38,9 @@ userRouter(app);
 commentRouter(app);
 
 mailRouter(app);
+
+app.use((req, res) => {
+  res.status(404).json({
+    message: "Route / page doesn't exist.",
+  });
+});
