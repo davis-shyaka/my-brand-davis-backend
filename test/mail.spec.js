@@ -1,18 +1,18 @@
 // Endpoint testing with mocha and chai and chai-http
 
 // Import libraries
-const chai = require("chai");
-const chaiHttp = require("chai-http");
+import chai from "chai";
+import chaiHttp from "chai-http";
 
 const should = chai.should();
-var mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // Import server
-var server = require("../server");
+import server from "../lib/server.js";
 
 // Import Mail Model
-var Mail = require("../models/MailModel");
-const User = require("../models/UserModel");
+import Mail from "../lib/models/MailModel.js";
+import User from "../lib/models/UserModel.js";
 
 // use chaiHttp for making the actual HTTP requests
 chai.use(chaiHttp);
@@ -35,7 +35,7 @@ describe("My Brand : Mail Unit", () => {
       name: "Testing with Mocha",
       email: "mail@email.com",
       subject: "Well, either this works",
-      body: "Well, either this works, or I am in trouble.",
+      message: "Well, either this works, or I am in trouble.",
     });
     newMail.save(function (err) {
       done();
@@ -80,7 +80,7 @@ describe("My Brand : Mail Unit", () => {
               res.body[0].should.have.property("name");
               res.body[0].should.have.property("email");
               res.body[0].should.have.property("subject");
-              res.body[0].should.have.property("body");
+              res.body[0].should.have.property("message");
               res.body[0].should.have.property("_id");
               done();
             }
@@ -117,7 +117,7 @@ describe("My Brand : Mail Unit", () => {
                   response.body.should.have.property("name");
                   response.body.should.have.property("email");
                   response.body.should.have.property("subject");
-                  response.body.should.have.property("body");
+                  response.body.should.have.property("message");
                   response.body.should.have.property("_id");
                   done();
                 }
@@ -134,7 +134,8 @@ describe("My Brand : Mail Unit", () => {
         name: "Test Name",
         email: "mail@email.com",
         subject: "Test Subject",
-        body: "Test Body. Keep in mind to make me at least 10 characters long.",
+        message:
+          "Test Body. Keep in mind to make me at least 10 characters long.",
       })
       .end(function (err, res) {
         // the res object should have a status of 201
@@ -144,12 +145,12 @@ describe("My Brand : Mail Unit", () => {
         res.body.should.have.property("name");
         res.body.should.have.property("email");
         res.body.should.have.property("subject");
-        res.body.should.have.property("body");
+        res.body.should.have.property("message");
         res.body.should.have.property("_id");
         res.body.name.should.equal("Test Name");
         res.body.email.should.equal("mail@email.com");
         res.body.subject.should.equal("Test Subject");
-        res.body.body.should.equal(
+        res.body.message.should.equal(
           "Test Body. Keep in mind to make me at least 10 characters long."
         );
         done();

@@ -1,29 +1,50 @@
 {
-  "name": "my-brand-backend",
+  "name": "my-brand-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon server.js",
-    "test": "mocha --timeout 10000000000"
+    "build": "npx babel lib/server.js -d dist -w",
+    "dev": "nodemon lib/server.js",
+    "start": "npm run build && nodemon dist/server.js",
+    "serve": "node dist/server.js",
+    "test": "nyc mocha --require @babel/register",
+    "nyc": "nyc mocha test/*.js",
+    "report": "nyc report mocha test/mail.spec.js",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
+    "check-coverage": "istanbul cover node_modules/mocha/bin/_mocha && istanbul check-coverage"
   },
   "keywords": [],
-  "author": "",
+  "author": "SHYAKA Davis",
   "license": "ISC",
   "dependencies": {
-    "c8": "^7.12.0",
-    "chai": "^4.3.7",
-    "chai-http": "^4.3.0",
     "cloudinary": "^1.32.0",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "express-validator": "^6.14.2",
     "joi": "^17.7.0",
-    "mongoose": "^6.8.0",
     "multer": "^1.4.5-lts.1",
     "sharp": "^0.31.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/node": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/register": "^7.18.9",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mocha": "^10.2.0",
+    "mongoose": "^6.8.0",
+    "nodemon": "^2.0.20",
     "nyc": "^15.1.0"
+  },
+  "nyc": {
+    "exclude": [
+      "coverage",
+      "test",
+      "node_modules",
+      "dist"
+    ]
   }
 }
