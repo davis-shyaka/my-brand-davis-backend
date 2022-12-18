@@ -10,6 +10,8 @@
     "start": "npm run build && nodemon dist/server.js",
     "serve": "node dist/server.js",
     "test": "nyc mocha --require @babel/register",
+    "nyc": "nyc mocha test/*.js",
+    "report": "nyc report mocha test/mail.spec.js",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
     "check-coverage": "istanbul cover node_modules/mocha/bin/_mocha && istanbul check-coverage"
   },
@@ -36,5 +38,13 @@
     "mongoose": "^6.8.0",
     "nodemon": "^2.0.20",
     "nyc": "^15.1.0"
+  },
+  "nyc": {
+    "exclude": [
+      "coverage",
+      "test",
+      "node_modules",
+      "dist"
+    ]
   }
 }
