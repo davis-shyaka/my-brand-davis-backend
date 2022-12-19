@@ -9,16 +9,15 @@
     "dev": "nodemon lib/server.js",
     "start": "npm run build && nodemon dist/server.js",
     "serve": "node dist/server.js",
-    "test": "nyc mocha --require @babel/register",
-    "nyc": "nyc mocha test/*.js",
-    "report": "nyc report mocha test/mail.spec.js",
-    "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
-    "check-coverage": "istanbul cover node_modules/mocha/bin/_mocha && istanbul check-coverage"
+    "test": "c8 mocha --require @babel/register",
+    "report": "c8 mocha test/test.spec.js",
+    "test-report": "c8 mocha --reporter mocha-badge-generator --timeout 10000 --recursive 'test/test.spec.js' --exit"
   },
   "keywords": [],
   "author": "SHYAKA Davis",
   "license": "ISC",
   "dependencies": {
+    "c8": "^7.12.0",
     "cloudinary": "^1.32.0",
     "joi": "^17.7.0",
     "multer": "^1.4.5-lts.1",
@@ -35,16 +34,8 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mocha": "^10.2.0",
+    "mocha-badge-generator": "^0.10.6",
     "mongoose": "^6.8.0",
-    "nodemon": "^2.0.20",
-    "nyc": "^15.1.0"
-  },
-  "nyc": {
-    "exclude": [
-      "coverage",
-      "test",
-      "node_modules",
-      "dist"
-    ]
+    "nodemon": "^2.0.20"
   }
 }
