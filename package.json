@@ -9,8 +9,8 @@
     "dev": "nodemon lib/server.js",
     "start": "npm run build && nodemon dist/server.js",
     "serve": "node dist/server.js",
-    "test": "c8 mocha --require @babel/register",
-    "report": "c8 mocha test/test.spec.js",
+    "test-2": "c8 mocha --require @babel/register",
+    "test": "mocha --timeout 10000 test/test.spec.js",
     "test-report": "c8 mocha --reporter mocha-badge-generator --timeout 10000 --recursive 'test/test.spec.js' --exit"
   },
   "keywords": [],
