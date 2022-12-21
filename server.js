@@ -18,7 +18,7 @@ db()
 const app = express()
 
 // define port to run express app
-const port = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
 
 // use json middleware on express app to be able to parse them in every single request.
 app.use(express.json())
@@ -30,9 +30,9 @@ app.get('/', (req, res) => {
 })
 
 // Listen to server
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`)
-  swaggerDocs(app, port)
+app.listen(`0.0.0.0:$PORT`, () => {
+  console.log(`Server running at http://localhost:${PORT}`)
+  swaggerDocs(app, PORT)
   app.use((req, res) => {
     res.status(404).json({
       message: "Route / page doesn't exist."
