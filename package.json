@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npx babel lib/server.js -d dist -w",
     "dev": "nodemon lib/server.js",
-    "start": "npm run build && nodemon dist/server.js",
+    "start": "node lib/server.js",
     "serve": "node dist/server.js",
     "test-2": "c8 mocha --require @babel/register",
     "test": "mocha --timeout 10000 test/test.spec.js",
