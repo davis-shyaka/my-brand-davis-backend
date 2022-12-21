@@ -4,8 +4,8 @@
 import chai from 'chai'
 import chaiHttp from 'chai-http'
 import server from '../lib/server.js'
-import Mail from '../lib/models/MailModel.js'
-import User from '../lib/models/UserModel.js'
+import Mail from '../lib/models/mailModel.js'
+import User from '../lib/models/userModel.js'
 
 const should = chai.should()
 

@@ -1,8 +1,8 @@
 import express from 'express'
-import post from '../controllers/PostController.js'
+import post from '../controllers/postController.js'
 import validates from '../middleware/validationMiddleware.js'
-import { postCreation } from '../middleware/validation/PostValidation.js'
-import { isAuth, isAdmin } from '../middleware/Authentication.js'
+import { postCreation } from '../middleware/validation/postValidation.js'
+import { isAuth, isAdmin } from '../middleware/authentication.js'
 
 const router = express.Router()
 

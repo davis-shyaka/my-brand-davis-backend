@@ -1,8 +1,8 @@
 import express from 'express'
-import mail from '../controllers/MailController.js'
+import mail from '../controllers/mailController.js'
 import validates from '../middleware/validationMiddleware.js'
 import { mailCreation } from '../middleware/validation/mailValidation.js'
-import { isAuth, isAdmin } from '../middleware/Authentication.js'
+import { isAuth, isAdmin } from '../middleware/authentication.js'
 
 const router = express.Router()
 

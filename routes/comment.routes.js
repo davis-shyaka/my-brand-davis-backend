@@ -2,7 +2,7 @@ import express from 'express'
 import comment from '../controllers/commentController.js'
 import validates from '../middleware/validationMiddleware.js'
 import { commentCreation } from '../middleware/validation/commentValidation.js'
-import { isAuth, isAdmin } from '../middleware/Authentication.js'
+import { isAuth, isAdmin } from '../middleware/authentication.js'
 
 const router = express.Router()
 

@@ -2,8 +2,8 @@
 import chai from 'chai'
 import chaiHttp from 'chai-http'
 import server from '../lib/server.js'
-import Post from '../lib/models/PostModel.js'
-import User from '../lib/models/UserModel.js'
+import Post from '../lib/models/postModel.js'
+import User from '../lib/models/userModel.js'
 
 const should = chai.should()
 // use chaiHttp for making the actual HTTP requests

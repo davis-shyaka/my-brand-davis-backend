@@ -1,8 +1,8 @@
 import express from 'express'
-import user from '../controllers/UserController.js'
+import user from '../controllers/userController.js'
 import validates from '../middleware/validationMiddleware.js'
-import validation from '../middleware/validation/UserValidation.js'
-import { isAuth, isAdmin } from '../middleware/Authentication.js'
+import validation from '../middleware/validation/userValidation.js'
+import { isAuth, isAdmin } from '../middleware/authentication.js'
 
 const router = express.Router()
 
