@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import User from '../models/UserModel.js'
+import User from '../models/userModel.js'
 
 const isAuth = async (req, res, next) => {
   if (req.headers && req.headers.authorization) {

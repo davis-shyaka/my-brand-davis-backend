@@ -1,4 +1,4 @@
-import Mail from '../models/MailModel.js'
+import Mail from '../models/mailModel.js'
 
 // Get all mail
 const allMail = async (req, res) => {

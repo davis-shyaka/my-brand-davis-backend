@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import Comment from '../models/CommentModel.js'
+import Comment from './commentModel.js'
 
 const postSchema = mongoose.Schema({
   cover: String,

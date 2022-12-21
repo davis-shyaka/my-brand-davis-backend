@@ -1,5 +1,5 @@
-import Comment from '../models/CommentModel.js'
-import Post from '../models/PostModel.js'
+import Comment from '../models/commentModel.js'
+import Post from '../models/postModel.js'
 
 // get all comments
 const allComments = async (req, res) => {
