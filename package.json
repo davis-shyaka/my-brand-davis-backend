@@ -5,14 +5,10 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "build": "npx babel lib/server.js -d dist -w",
-    "dev": "nodemon lib/server.js",
     "start": "node lib/server.js",
-    "serve": "node dist/server.js",
-    "test-2": "c8 mocha --require @babel/register",
+    "dev": "nodemon lib/server.js",
     "test": "mocha --timeout 10000 test/test.spec.js",
-    "test-report": "c8 mocha --reporter mocha-badge-generator --timeout 10000 --recursive 'test/test.spec.js' --exit",
-    "lint:fix": "eslint --fix ./lib/middleware/validation/*.js"
+    "test-report": "c8 mocha --reporter mocha-badge-generator --timeout 10000 --recursive 'test/test.spec.js' --exit"
   },
   "keywords": [],
   "author": "SHYAKA Davis",
