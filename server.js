@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 })
 
 // Listen to server
-app.listen(`0.0.0.0:$PORT`, () => {
+app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`)
   swaggerDocs(app, PORT)
   app.use((req, res) => {
