@@ -45,7 +45,7 @@ router.get('/user/get/:id', [isAuth, isAdmin], user.getUser) // individual user
  * /user/sign_up:
  *   post:
  *     summary: Create user account
- *     tags: [auth routes]
+ *     tags: [user routes]
  *     requestBody:
  *       description: Please fill all required fields
  *       required: true
@@ -64,7 +64,7 @@ router.post('/user/sign_up', validates(validation.userSignUp), user.createUser) 
  * /user/log_in:
  *   post:
  *     summary: Login to your account
- *     tags: [auth routes]
+ *     tags: [user routes]
  *     requestBody:
  *       description: Please fill all required fields
  *       required: true
@@ -82,7 +82,7 @@ router.post('/user/log_in', validates(validation.userSignIn), user.userSignIn) /
  * /user/log_out:
  *   post:
  *     summary: Logout to your account
- *     tags: [auth routes]
+ *     tags: [user routes]
  *     requestBody:
  *       description: Please fill all required fields
  *       required: true
