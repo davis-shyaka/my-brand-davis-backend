@@ -8,10 +8,10 @@ const should = chai.should()
 import mongoose from 'mongoose'
 
 // Import server
-import server from '../lib/server.js'
+import server from '../src/server.js'
 
 // Import User Model
-import User from '../lib/models/userModel.js'
+import User from '../src/models/userModel.js'
 
 // use chaiHttp for making the actual HTTP requests
 chai.use(chaiHttp)
@@ -151,8 +151,6 @@ describe('My Brand : User Unit', () => {
         res.body.should.have.property('surname')
         res.body.should.have.property('givenName')
         res.body.should.have.property('email')
-        res.body.should.have.property('password')
-        res.body.should.have.property('_id')
         res.body.surname.should.equal('SHYAKA')
         res.body.givenName.should.equal('Davis')
         res.body.email.should.equal('shyaka@gmail.com')
@@ -224,7 +222,7 @@ describe('My Brand : User Unit', () => {
 
 // post
 // Import Post Model
-import Post from '../lib/models/PostModel.js'
+import Post from '../src/models/postModel.js'
 
 // use chaiHttp for making the actual HTTP requests
 chai.use(chaiHttp)
@@ -469,7 +467,7 @@ describe('My Brand : Post Unit', () => {
 // mail
 
 // Import Mail Model
-import Mail from '../lib/models/MailModel.js'
+import Mail from '../src/models/mailModel.js'
 
 // use chaiHttp for making the actual HTTP requests
 chai.use(chaiHttp)

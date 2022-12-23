@@ -1,6 +1,6 @@
 /// Endpoint testing with mocha and chai and chai-http
 
-// Import libraries
+// Import srcraries
 import chai from 'chai'
 import chaiHttp from 'chai-http'
 
@@ -8,10 +8,10 @@ const should = chai.should()
 import mongoose from 'mongoose'
 
 // Import server
-import server from '../lib/server.js'
+import server from '../src/server.js'
 
 // Import User Model
-import User from '../lib/models/userModel.js'
+import User from '../src/models/userModel.js'
 
 // use chaiHttp for making the actual HTTP requests
 chai.use(chaiHttp)
