@@ -44,7 +44,7 @@ router.get('/mail/get/:id', [isAuth, isAdmin], mail.getMail) // individual mail
 /**
  * @swagger
  * /mail/create/:
- *   mail:
+ *   post:
  *     summary: Send a new message
  *     tags: [mail routes]
  *     requestBody:
