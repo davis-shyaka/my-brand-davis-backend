@@ -10,9 +10,9 @@ const allComments = async (req, res) => {
       path: 'post user',
       select: 'title surname givenName email'
     })
-    res.status(200).json({ data: [...data], success: true })
+    res.status(200).json({ statusCode: 200, success: true, data: [...data] })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    res.json({ success: false, data: [{ message: error.message }] })
   }
 }
 
@@ -21,12 +21,16 @@ const getComment = async (req, res) => {
   try {
     const comment = await Comment.findOne({ _id: req.params.id })
     if (!comment) {
-      res
-        .status(404)
-        .send({ success: false, message: "Comment doesn't exist!" })
-    } else res.status(200).json(comment)
+      res.status(404).send({
+        statusCode: 404,
+        success: false,
+        data: [{ message: "Comment doesn't exist!" }]
+      })
+    } else {
+      res.status(200).json({ statusCode: 200, success: true, data: [comment] })
+    }
   } catch (error) {
-    res.status(404).send({ success: false, message: error.message })
+    res.status(404).send({ success: false, data: [{ message: error.message }] })
   }
 }
 
@@ -38,13 +42,17 @@ const createComment = async (req, res) => {
     // find out which user is commenting
     const user = req.user
     if (!id) {
-      res
-        .status(404)
-        .json({ success: false, message: 'Must select a post to comment!' })
+      res.status(404).json({
+        statusCode: 404,
+        success: false,
+        data: [{ message: 'Must select a post to comment!' }]
+      })
     } else if (!user) {
-      res
-        .status(405)
-        .json({ success: false, message: 'Must be logged in to comment' })
+      res.status(405).json({
+        statusCode: 405,
+        success: false,
+        data: [{ message: 'Must be logged in to comment' }]
+      })
     } else if (id && user) {
       // get the comment text and record post id
       const comment = new Comment({
@@ -57,9 +65,11 @@ const createComment = async (req, res) => {
         // get this particular post
         const postRelated = await Post.findById(id)
         if (!postRelated) {
-          res
-            .status(404)
-            .json({ success: false, message: "Post doesn't exist!" })
+          res.status(404).json({
+            statusCode: 404,
+            success: false,
+            data: [{ message: "Post doesn't exist!" }]
+          })
         } else {
           // save comment
           await comment.save()
@@ -67,17 +77,26 @@ const createComment = async (req, res) => {
           postRelated.comments.push(comment)
           // save and redirect...
           await postRelated.save()
-          res.status(201).json(postRelated)
+          res.status(201).json({
+            statusCode: 201,
+            success: true,
+            data: [
+              { message: 'Posted comment successfully', body: postRelated }
+            ]
+          })
         }
       } catch (error) {
         res.status(404).json({
+          statusCode: 404,
           success: false,
-          message: 'The post you are trying to comment on does not exist'
+          data: [
+            { message: 'The post you are trying to comment on does not exist' }
+          ]
         })
       }
     }
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    res.json({ success: false, data: [{ message: error.message }] })
   }
 }
 
@@ -86,20 +105,22 @@ const deleteComment = async (req, res) => {
   try {
     const comment = await Comment.findOne({ _id: req.params.id })
     if (!comment) {
-      res
-        .status(404)
-        .send({ success: false, message: "Comment doesn't exist!" })
+      res.status(404).send({
+        statusCode: 404,
+        success: false,
+        data: [{ message: "Comment doesn't exist!" }]
+      })
     } else {
       await comment.deleteOne()
-      res.json({
+      res.status(200).json({
+        statusCode: 200,
         success: true,
-        message: 'Comment successfully deleted',
-        comment
+        data: [{ message: 'Comment successfully deleted', body: comment }]
       })
     }
   } catch (err) {
     console.error(err.message)
-    res.status(500).json({ success: false, message: err.message })
+    res.status(500).json({ success: false, data: [{ message: err.message }] })
   }
 }
 

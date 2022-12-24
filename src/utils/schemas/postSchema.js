@@ -11,13 +11,13 @@
  *      properties:
  *        title:
  *          type: string
- *          default: Still can't believe this is all real
+ *          default: Still can't believe
  *        caption:
  *          type: string
- *          default: Still trying to decide how I feel
+ *          default: Still trying
  *        content:
  *          type: string
- *          default: Still don't really need them
+ *          default: Still can't believe this is all real. Still trying to figure out how I feel. Still don't really need them
  *    CreatePostResponse:
  *      type: object
  *      properties:

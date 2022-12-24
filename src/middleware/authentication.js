@@ -11,8 +11,9 @@ const isAuth = async (req, res, next) => {
       if (!user) {
         res.status(403)
         return res.json({
+          statusCode: 403,
           success: false,
-          message: 'Unauthorized access.'
+          data: [{ message: 'Unauthorized access.' }]
         })
       }
       const userInfo = {
@@ -29,9 +30,10 @@ const isAuth = async (req, res, next) => {
       res.json({ success: false, message: `Forbidden: ${error.message}` })
     }
   } else {
-    res.status(403).json({
+    res.status(401).json({
+      statusCode: 401,
       success: false,
-      message: 'Unauthorized access! You need to first log in.'
+      data: [{ message: 'You need to first log in.' }]
     })
   }
 }
@@ -41,16 +43,18 @@ const isAdmin = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.user.id })
     if (!user) {
-      res.status(403)
+      res.status(401)
       return res.json({
+        statusCode: 401,
         success: false,
-        message: 'Forbidden: Unauthorized access.'
+        data: [{ message: 'Unauthorized access.' }]
       })
     }
     if (user.isAdmin === false) {
       return res.json({
+        statusCode: 405,
         success: false,
-        message: 'Access Denied! Not an admin'
+        data: [{ message: 'Access Denied!' }]
       })
     }
     if (user.isAdmin === true) {
