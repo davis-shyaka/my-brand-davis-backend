@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: false }))
 
 // Add endpoint
 app.get('/', (req, res) => {
-  res.end('Saitama')
+  res.end('Welcome: Please use the /docs endpoint to test the api')
 })
 
 // Listen to server
