@@ -23,6 +23,6 @@ const contactSchema = mongoose.Schema({
   }
 })
 
-const Contact = mongoose.model('Contact', contactSchema)
+const Contact = mongoose.model('Message', contactSchema)
 
 export default Contact
