@@ -65,7 +65,7 @@ router.post(
 /**
  * @swagger
  * /post/update/{postId}:
- *   put:
+ *   patch:
  *     summary: Update a post only by admin
  *     tags: [post routes]
  *     parameters:
