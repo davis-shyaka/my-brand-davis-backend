@@ -95,28 +95,13 @@ const userSignIn = async (req, res) => {
     }
   )
 
-  let oldTokens = user.tokens || []
-  if (oldTokens.length) {
-    oldTokens = oldTokens.filter((token) => {
-      const timeDiff = (Date.now() - parseInt(token.signedAt)) / 1000
-      if (timeDiff < 86400) {
-        return token
-      } else {
-        return null
-      }
-    })
-  }
-  await User.findByIdAndUpdate(user._id, {
-    tokens: [...oldTokens, { token, signedAt: Date.now().toString() }]
-  })
   const userInfo = {
-    surname: user.surname,
-    givenName: user.givenName,
-    email: user.email,
-    avatar: user.avatar ? user.avatar : '',
+    isAdmin: user.isAdmin,
     token
   }
-  res.status(200).json({ statusCode: 200, success: true, data: [userInfo] })
+  res
+    .status(200)
+    .json({ statusCode: 200, success: true, data: [{ user: userInfo }] })
 }
 
 // Sign Out

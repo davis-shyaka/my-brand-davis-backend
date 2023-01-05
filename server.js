@@ -1,9 +1,9 @@
-// Import API route
 import postRouter from './src/routes/post.routes.js' // importing post route
 import userRouter from './src/routes/user.routes.js' // importing user route
 import commentRouter from './src/routes/comment.routes.js' // importing comment route
 import mailRouter from './src/routes/mail.routes.js' // importing mail route
 import swaggerDocs from './src/utils/swagger.js' // importing swagger docs
+import cors from 'cors' // importing cors
 
 // import express
 import express from 'express'
@@ -23,6 +23,9 @@ const PORT = process.env.PORT || 3000
 // use json middleware on express app to be able to parse them in every single request.
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+
+// creating an instance of cors with express app instance
+app.use(cors())
 
 // Add endpoint
 app.get('/', (req, res) => {

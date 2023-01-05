@@ -1,11 +1,11 @@
 import Joi from 'joi'
 
 const schema = Joi.object({
-  title: Joi.string().trim().min(3).max(30).required(),
+  title: Joi.string().trim().required(),
 
-  caption: Joi.string().trim().min(3).max(30).required(),
+  caption: Joi.string().trim().required(),
 
-  content: Joi.string().trim().min(30).max(2500).required()
+  content: Joi.string().trim().required()
 })
 
 export { schema as postCreation }

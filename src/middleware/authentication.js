@@ -16,15 +16,8 @@ const isAuth = async (req, res, next) => {
           data: [{ message: 'Unauthorized access.' }]
         })
       }
-      const userInfo = {
-        id: user._id,
-        surname: user.surname,
-        givenName: user.givenName,
-        email: user.email,
-        avatar: user.avatar ? user.avatar : '',
-        token: user.tokens
-      }
-      req.user = userInfo
+
+      req.user = user
       next()
     } catch (error) {
       res.json({ success: false, message: `Forbidden: ${error.message}` })
