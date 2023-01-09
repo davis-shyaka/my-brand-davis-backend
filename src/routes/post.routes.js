@@ -3,6 +3,7 @@ import post from '../controllers/postController.js'
 import validates from '../middleware/validationMiddleware.js'
 import { postCreation } from '../middleware/validation/postValidation.js'
 import { isAuth, isAdmin } from '../middleware/authentication.js'
+import { commentCreation } from '../middleware/validation/commentValidation.js'
 
 const router = express.Router()
 
@@ -111,5 +112,19 @@ router.patch(
  *          description: not found
  */
 router.delete('/post/delete/:id', [isAuth, isAdmin], post.deletePost) // delete post
+
+router.get('/post/:id/comment/all', post.getAllComments) // all comments
+
+router.post(
+  '/post/create/comment/:id',
+  [isAuth, validates(commentCreation)],
+  post.createComment
+) // create post
+
+router.delete(
+  '/post/:postID/delete/comment/:commentID',
+  [isAuth, isAdmin],
+  post.deleteComment
+) // delete comment
 
 export default router
